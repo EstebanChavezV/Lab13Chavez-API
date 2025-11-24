@@ -1,0 +1,39 @@
+name: Build and Deploy .NET Application
+
+# Este workflow se ejecuta automáticamente en cada push a la rama principal
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # Entorno de ejecución
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4 # Obtiene el código del repositorio
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0' # Usamos 9.0 según tu configuración de Rider
+
+      - name: Restore dependencies
+        # Restaura las dependencias de toda la solución
+        run: dotnet restore Lab13Chavez.sln 
+
+      - name: Build application
+        # Compila la solución en modo Release
+        run: dotnet build Lab13Chavez.sln --configuration Release --no-restore 
+
+      - name: Publish application
+        # Publica solo el proyecto API a la carpeta './published'
+        run: dotnet publish Lab13Chavez.API/Lab13Chavez.API.csproj --configuration Release --output ./published 
+      
+      - name: Upload artifact
+        # Sube los archivos publicados como un artefacto de GitHub
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-app
+          path: ./published
