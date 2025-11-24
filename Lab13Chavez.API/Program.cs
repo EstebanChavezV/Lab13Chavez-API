@@ -32,18 +32,20 @@ var app = builder.Build();
 
 // ----------------------------------------------------
 // Configuración del Middleware
-// Usa Swagger y Swagger UI solo en entornos de Desarrollo
-if (app.Environment.IsDevelopment())
+// MOVIDO: Habilitamos Swagger FUERA del bloque IsDevelopment para que funcione en Render (Producción)
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    // Habilita el middleware para servir el documento JSON generado por Swagger
-    app.UseSwagger();
-    // Habilita el middleware para servir la interfaz gráfica de Swagger UI
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Lab13Chavez API v1");
-    });
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Lab13Chavez API v1");
+});
 // ----------------------------------------------------
+
+// DEJAMOS ESTE BLOQUE SOLO SI HAY OTRAS CONFIGURACIONES ESPECÍFICAS DE DESARROLLO
+// if (app.Environment.IsDevelopment())
+// {
+// Las líneas de Swagger se movieron arriba
+// }
+
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
