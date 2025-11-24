@@ -1,0 +1,6 @@
+@Lab13Chavez.API_HostAddress = http://localhost:5015
+
+GET {{Lab13Chavez.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
